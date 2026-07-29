@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Live Detection</title>
+<style>
+  :root { --bg:#0e1116; --card:#161b22; --border:#2a2f3a; --text:#e6edf3; --muted:#8b949e; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: -apple-system, Segoe UI, Roboto, sans-serif; background:var(--bg); color:var(--text); }
+  header { padding: 28px 40px; border-bottom:1px solid var(--border); }
+  header h1 { margin:0; font-size: 22px; }
+  .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; }
+  img { width:100%; border-radius:8px; border:1px solid var(--border); display:block; }
+  a.back { color:var(--muted); text-decoration:none; font-size:14px; }
+  p.note { color:var(--muted); font-size:13px; }
+</style>
+</head>
+<body>
+<header><h1>🚁 Live Detection Feed</h1></header>
+<div class="container">
+  <a class="back" href="/">&larr; Back</a>
+  <div class="card" style="margin-top:16px;">
+    <img src="{{ url_for('live_feed', source=source, record='1' if record else '0') }}" alt="live feed">
+  </div>
+  {% if record %}
+  <p class="note">Recording to outputs/live_recording.mp4 — stop this page (close tab) to finalize the file.</p>
+  {% endif %}
+</div>
+</body>
+</html>

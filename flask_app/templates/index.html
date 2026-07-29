@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Aerial Crime Detection</title>
+<style>
+  :root { --bg:#0e1116; --card:#161b22; --border:#2a2f3a; --accent:#ff4d4f; --accent2:#2ecc71; --text:#e6edf3; --muted:#8b949e; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: -apple-system, Segoe UI, Roboto, sans-serif; background:var(--bg); color:var(--text); }
+  header { padding: 28px 40px; border-bottom:1px solid var(--border); }
+  header h1 { margin:0; font-size: 22px; }
+  header p { margin:6px 0 0; color:var(--muted); font-size: 14px; }
+  .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:28px; margin-bottom:24px; }
+  .card h2 { margin-top:0; font-size:17px; }
+  label { display:block; font-size:13px; color:var(--muted); margin-bottom:8px; }
+  input[type=file], input[type=text] {
+    width:100%; padding:10px 12px; border-radius:8px; border:1px solid var(--border);
+    background:#0d1117; color:var(--text); font-size:14px; margin-bottom:16px;
+  }
+  .row { display:flex; gap:16px; align-items:flex-end; flex-wrap:wrap; }
+  .row > div { flex:1; min-width:200px; }
+  button {
+    background: var(--accent); color:white; border:none; padding:11px 22px;
+    border-radius:8px; font-size:14px; font-weight:600; cursor:pointer;
+  }
+  button.secondary { background: #30363d; }
+  button:hover { opacity: 0.9; }
+  .flash { background:#3d1f1f; border:1px solid var(--accent); color:#ffb3b3; padding:10px 14px; border-radius:8px; margin-bottom:16px; font-size:14px; }
+  .legend { display:flex; gap:20px; margin-top:8px; font-size:13px; color:var(--muted); }
+  .swatch { display:inline-block; width:12px; height:12px; border-radius:3px; margin-right:6px; vertical-align:middle; }
+  .checkbox-row { display:flex; align-items:center; gap:8px; margin-bottom:16px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🚁 Aerial Crime Detection</h1>
+  <p>Upload drone footage or connect a live/RTSP stream for real-time violence detection.</p>
+</header>
+
+<div class="container">
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for m in messages %}<div class="flash">{{ m }}</div>{% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <div class="card">
+    <h2>Analyze a recorded video</h2>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+      <label for="video">Video file (.mp4, .avi, .mov, .mkv)</label>
+      <input type="file" id="video" name="video" accept=".mp4,.avi,.mov,.mkv" required>
+      <button type="submit">Run Detection</button>
+    </form>
+    <div class="legend">
+      <span><span class="swatch" style="background:var(--accent2)"></span>NonViolence</span>
+      <span><span class="swatch" style="background:var(--accent)"></span>Violence</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Live / drone stream</h2>
+    <form action="/live_view" method="get">
+      <div class="row">
+        <div>
+          <label for="source">Source (0 = local webcam, or rtsp://drone-ip/stream)</label>
+          <input type="text" id="source" name="source" value="0" placeholder="0 or rtsp://192.168.1.50:8554/live">
+        </div>
+      </div>
+      <div class="checkbox-row">
+        <input type="checkbox" id="record" name="record" value="1">
+        <label for="record" style="margin:0;">Record annotated stream to outputs/live_recording.mp4</label>
+      </div>
+      <button type="submit" class="secondary">Open Live View</button>
+    </form>
+  </div>
+</div>
+</body>
+</html>
